@@ -77,4 +77,9 @@ public class Tower : MonoBehaviour
         Debug.Log("ja");
         this.GetComponent<LineRenderer>().enabled = true;
     }
+
+    public static void ClickedUpgrade()
+    {
+        
+    }
 }

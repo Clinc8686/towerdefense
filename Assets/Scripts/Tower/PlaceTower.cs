@@ -33,7 +33,7 @@ public class PlaceTower : MonoBehaviour
         }
     }
 
-    void OnLeftClick()
+    void OnLeftClick(InputAction.CallbackContext context)
     {
         if (towerDragged && Tower.collide == false)
         {
