@@ -8,10 +8,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject spawnPointEnemy;
     void Start()
     {
-        StartCoroutine(ExecuteAfterTime(0));
-        StartCoroutine(ExecuteAfterTime(1));
-        StartCoroutine(ExecuteAfterTime(2));
-        StartCoroutine(ExecuteAfterTime(3));
+        for (int i = 0; i < 100; i++)
+        {
+            StartCoroutine(ExecuteAfterTime(i));
+        }
     }
     
     IEnumerator ExecuteAfterTime(float time)

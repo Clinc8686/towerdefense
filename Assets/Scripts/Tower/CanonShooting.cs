@@ -8,27 +8,47 @@ public class CanonShooting : MonoBehaviour
     public GameObject projectileSpawnLevel2;
     public GameObject projectileLevel1;
     public GameObject projectileLevel2;
+    private GameObject Canon;
+    private GameObject[] enemies;
     private float radius = 4.5f;
-    private float projectileSpeed = 3.0f;
+    private float projectileSpeed = 20.0f;
     private float latestShooting = 0.0f;
     private float duration = 0.5f;
     void Start()
     {
-        
+        Canon = gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
     }
     
     void Update()
     {
-        GameObject enemy = GameObject.FindWithTag("Enemy");
-        if (enemy != null && PlaceTower.towerDragged != true)
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        
+        if (enemies != null)
         {
-            if (Vector2.Distance(enemy.GetComponent<PolygonCollider2D>().ClosestPoint(transform.position), transform.position) < radius)
+            foreach (var enemy in enemies)
             {
-                float zAngle = Mathf.Atan2(transform.position.y - enemy.transform.position.y,
-                    transform.position.x - enemy.transform.position.x);
-                float zAngleDegrees = (180 / Mathf.PI) * zAngle;
-                transform.rotation = Quaternion.Euler(0,0,zAngleDegrees+90);
-                Shoot(enemy);
+                if (enemy != null /*&& PlaceTower.towerDragged != true*/)
+                {
+                    if (Vector2.Distance(enemy.GetComponent<PolygonCollider2D>().ClosestPoint(Canon.transform.position), Canon.transform.position) < radius)
+                    {
+                        //Das hier ist noch uncool gelöst
+                        switch (Tower.TowerLevel)
+                        {
+                            case 1:
+                                Canon = gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+                                break;
+                            case 2:
+                                Canon = gameObject.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject;
+                                break;
+                        }
+                
+                        float zAngle = Mathf.Atan2(Canon.transform.position.y - enemy.transform.position.y,
+                            Canon.transform.position.x - enemy.transform.position.x);
+                        float zAngleDegrees = (180 / Mathf.PI) * zAngle;
+                        Canon.transform.rotation = Quaternion.Euler(0,0,zAngleDegrees+90);
+                        Shoot(enemy);
+                    }
+                }
             }
         }
     }
@@ -38,6 +58,7 @@ public class CanonShooting : MonoBehaviour
         latestShooting += Time.deltaTime;
         if (latestShooting >= duration)
         {
+            //Das hier ist noch uncool gelöst
             GameObject projectile = null;
             GameObject projectileSpawn = null;
             switch (Tower.TowerLevel)
@@ -55,12 +76,10 @@ public class CanonShooting : MonoBehaviour
             GameObject ShootedProjectile = Instantiate(projectile, projectileSpawn.transform.position, projectileSpawn.transform.rotation);
             ShootedProjectile.transform.Rotate(0,0,0);
             Rigidbody2D rb = ShootedProjectile.GetComponent<Rigidbody2D>();
-            rb.AddForce(projectileSpawn.transform.up * 20, ForceMode2D.Impulse);
+            rb.AddForce(projectileSpawn.transform.up * projectileSpeed, ForceMode2D.Impulse);
 
             Destroy(ShootedProjectile, 10.0f);
             latestShooting = 0.0f;
         }
     }
-    
-    
 }
