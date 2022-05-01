@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanonShooting1 : MonoBehaviour
+public class CanonShooting : MonoBehaviour
 {
-    public GameObject projectileSpawn;
-    public GameObject projectile;
-    private float radius = 2.5f;
+    public GameObject projectileSpawnLevel1;
+    public GameObject projectileSpawnLevel2;
+    public GameObject projectileLevel1;
+    public GameObject projectileLevel2;
+    private float radius = 4.5f;
     private float projectileSpeed = 3.0f;
     private float latestShooting = 0.0f;
     private float duration = 0.5f;
@@ -18,7 +20,7 @@ public class CanonShooting1 : MonoBehaviour
     void Update()
     {
         GameObject enemy = GameObject.FindWithTag("Enemy");
-        if (enemy != null && PlaceTower1.tower1Dragged != true)
+        if (enemy != null && PlaceTower.towerDragged != true)
         {
             if (Vector2.Distance(enemy.GetComponent<PolygonCollider2D>().ClosestPoint(transform.position), transform.position) < radius)
             {
@@ -26,7 +28,6 @@ public class CanonShooting1 : MonoBehaviour
                     transform.position.x - enemy.transform.position.x);
                 float zAngleDegrees = (180 / Mathf.PI) * zAngle;
                 transform.rotation = Quaternion.Euler(0,0,zAngleDegrees+90);
-                //Debug.Log("got him!");
                 Shoot(enemy);
             }
         }
@@ -37,8 +38,19 @@ public class CanonShooting1 : MonoBehaviour
         latestShooting += Time.deltaTime;
         if (latestShooting >= duration)
         {
-            /*GameObject ShootedProjectile = Instantiate(projectile, projectileSpawn.transform.position, Quaternion.identity);
-            ShootedProjectile.transform.Rotate(0,0,180);*/
+            GameObject projectile = null;
+            GameObject projectileSpawn = null;
+            switch (Tower.TowerLevel)
+            {
+                case 1:
+                    projectile = projectileLevel1;
+                    projectileSpawn = projectileSpawnLevel1;
+                    break;
+                case 2:
+                    projectile = projectileLevel2;
+                    projectileSpawn = projectileSpawnLevel2;
+                    break;
+            }
 
             GameObject ShootedProjectile = Instantiate(projectile, projectileSpawn.transform.position, projectileSpawn.transform.rotation);
             ShootedProjectile.transform.Rotate(0,0,0);
@@ -49,4 +61,6 @@ public class CanonShooting1 : MonoBehaviour
             latestShooting = 0.0f;
         }
     }
+    
+    
 }

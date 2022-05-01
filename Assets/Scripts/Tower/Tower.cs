@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Tower1 : MonoBehaviour
+public class Tower : MonoBehaviour
 {
     public LineRenderer circleRenderer;
-    private float radius = 2.5f;
+    private float CircleRadius = 3.5f;
     public static bool collide = false;
-    public static bool isPlaced;
+    public static int TowerLevel = 1;
     void Start()
     {
         circleRenderer.enabled = true;
-        DrawCircle(100,radius);
+        DrawCircle(100);
     }
 
     void Update()
@@ -23,7 +23,6 @@ public class Tower1 : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.collider.name);
         circleRenderer.startColor = Color.red;
         circleRenderer.endColor = Color.red;
         collide = true;
@@ -43,8 +42,17 @@ public class Tower1 : MonoBehaviour
         collide = false;
     }
 
-    void DrawCircle(int steps, float radius)
+    void DrawCircle(int steps)
     {
+        switch (TowerLevel)
+        {
+            case 1:
+                CircleRadius = 3.5f;
+                break;
+            case 2:
+                CircleRadius = 4.5f;
+                break;
+        }
         circleRenderer.positionCount = steps;
 
         for (int currentStep = 0; currentStep < steps; currentStep++)
@@ -56,16 +64,17 @@ public class Tower1 : MonoBehaviour
             float xScaled = Mathf.Cos(currentRadian);
             float yScaled = Mathf.Sin(currentRadian);
 
-            float x = xScaled * radius;
-            float y = yScaled * radius;
+            float x = xScaled * CircleRadius;
+            float y = yScaled * CircleRadius;
 
             Vector3 currentPosition = new Vector3(x, y, 0);
             circleRenderer.SetPosition(currentStep, currentPosition);
         }
     }
 
-    public void onUpgrade()
+    public void TowerClicked()
     {
-        
+        Debug.Log("ja");
+        this.GetComponent<LineRenderer>().enabled = true;
     }
 }
