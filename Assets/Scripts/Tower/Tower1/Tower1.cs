@@ -13,7 +13,7 @@ public class Tower1 : MonoBehaviour
     void Start()
     {
         circleRenderer.enabled = true;
-        DrawCircle(100,2.5f);
+        DrawCircle(100,radius);
     }
 
     void Update()
@@ -62,5 +62,10 @@ public class Tower1 : MonoBehaviour
             Vector3 currentPosition = new Vector3(x, y, 0);
             circleRenderer.SetPosition(currentStep, currentPosition);
         }
+    }
+
+    public void onUpgrade()
+    {
+        
     }
 }

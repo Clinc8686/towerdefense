@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanonShooting : MonoBehaviour
+public class CanonShooting1 : MonoBehaviour
 {
     public GameObject projectileSpawn;
     public GameObject projectile;
